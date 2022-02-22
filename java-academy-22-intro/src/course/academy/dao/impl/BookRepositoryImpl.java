@@ -7,10 +7,13 @@ import course.academy.model.Book;
 import java.util.Arrays;
 
 public class BookRepositoryImpl implements BookRepository {
+    //клас константа променлива указваща капацитета на репото;
     private static final int MAX_BOOKS = 10;
+    //репото е отговорно за генерирането на ключовете на книгите
     private static int nextId = 1;
 
     private Book[] books = new Book[MAX_BOOKS];
+    //начална дължина
     private int len = 0;
 
     @Override
@@ -26,7 +29,10 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Book update(Book book) throws InvalidRepositoryStateException {
         int index = findIndexById(book.getId());
-        if (index >= 0) books[index] = book;
+        if (index >= 0) {
+            books[index] = book;
+            return book;
+        }
         throw new InvalidRepositoryStateException("Book with id:" + book.getId() + " not found");
     }
 
@@ -56,6 +62,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book[] findAll() {
+        //Връща ново копие на книгите от началото до "len";
         return Arrays.copyOf(books, len);
     }
 
@@ -68,3 +75,14 @@ public class BookRepositoryImpl implements BookRepository {
         return Arrays.binarySearch(books, new Book(id));
     }
 }
+
+
+
+
+
+
+
+
+
+
+

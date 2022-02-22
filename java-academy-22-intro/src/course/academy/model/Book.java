@@ -3,7 +3,8 @@ package course.academy.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Book {
+//Указваме с какъв друг обект може да бъде сравнявана една книга
+public class Book implements Comparable<Book>{
     private int id;
     private String title;
     private String publisher;
@@ -23,6 +24,7 @@ public class Book {
         this.author = author;
     }
 
+    //използваме го за двуично търсене на id
     public Book(int id) {
         this.id = id;
     }
@@ -109,5 +111,10 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Book other) {
+        return this.getId() - other.getId();
     }
 }
