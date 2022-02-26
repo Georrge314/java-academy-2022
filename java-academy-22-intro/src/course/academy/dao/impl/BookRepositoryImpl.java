@@ -8,22 +8,36 @@ import java.util.Arrays;
 
 public class BookRepositoryImpl implements BookRepository {
     //клас константа променлива указваща капацитета на репото;
-    private static final int MAX_BOOKS = 10;
+    private static final int INITIAL_CAPACITY = 8;
     //репото е отговорно за генерирането на ключовете на книгите
     private static int nextId = 1;
 
-    private Book[] books = new Book[MAX_BOOKS];
+    private Book[] books;
     //начална дължина
     private int len = 0;
+
+    public BookRepositoryImpl() {
+        books = new Book[INITIAL_CAPACITY];
+    }
+
+    public BookRepositoryImpl(int initialCapacity) {
+        books = new Book[initialCapacity];
+    }
 
     @Override
     public Book create(Book book) throws InvalidRepositoryStateException {
         if (len < books.length) {
             book.setId(nextId++);
             books[len++] = book;
-            return book;
+        } else {
+            resize();
         }
-        throw new InvalidRepositoryStateException("Repository full (capacity = " + books.length + ").");
+        return book;
+//        throw new InvalidRepositoryStateException("Repository full (capacity = " + books.length + ").");
+    }
+
+    private void resize() {
+        books = Arrays.copyOf(books, 2 * books.length);;
     }
 
     @Override
