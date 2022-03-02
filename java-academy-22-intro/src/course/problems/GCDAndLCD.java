@@ -1,4 +1,4 @@
-package course.academy.dao.problems;
+package course.problems;
 
 import java.util.Scanner;
 
