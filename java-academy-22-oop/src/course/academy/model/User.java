@@ -71,6 +71,7 @@ public class User extends Person {
         this.active = active;
     }
 
+    @Override
     public String format() {
         return String.format("| %s | %-15.15s | %-15.15s | %-6.6s | %5.5b",
                 super.format(), username, password, role.name(), active);
