@@ -6,10 +6,10 @@ import java.util.StringJoiner;
 
 import static course.academy.model.Role.*;
 
-public class AdminUser extends User {
+public class Admin extends User {
     private String email;
 
-    public AdminUser(String firstName, String lastName, int age, String username, String password, String email) {
+    public Admin(String firstName, String lastName, int age, String username, String password, String email) {
         super(firstName, lastName, age, username, password, ADMIN, true);
         this.email = email;
     }
@@ -36,11 +36,11 @@ public class AdminUser extends User {
         blogs.add("Something 5678");
         blogs.add("Something 9101112");
 
-        var admin1 = new AdminUser("Ivan", "Georgiev", 25, "ivan2022","123456","ivan@gmail.com");
-        var author1 = new AuthorUser("Mario", "Vasilev", 35, "mario1997","123456", blogs);
-        var reader1 = new ReaderUser("Pesho", "Tolev", 45, "pesho123","123456", blogs);
-        var author2 = new AuthorUser("Dave", "Marionov", 38,"dave1990", "12314125");
-        var reader2 = new ReaderUser("Maria", "Petrova", 31,"mariaPe88", "dasdsagdfs");
+        var admin1 = new Admin("Ivan", "Georgiev", 25, "ivan2022","123456","ivan@gmail.com");
+        var author1 = new Author("Mario", "Vasilev", 35, "mario1997","123456", blogs);
+        var reader1 = new Reader("Pesho", "Tolev", 45, "pesho123","123456", blogs);
+        var author2 = new Author("Dave", "Marionov", 38,"dave1990", "12314125");
+        var reader2 = new Reader("Maria", "Petrova", 31,"mariaPe88", "dasdsagdfs");
 
         System.out.println(admin1);
         System.out.println(author1);

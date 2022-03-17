@@ -1,10 +1,12 @@
 package course.academy.model;
 
+import course.academy.dao.Identifiable;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 //Указваме с какъв друг обект може да бъде сравнявана една книга
-public class Book implements Comparable<Book>{
+public class Book implements Identifiable<Integer>, Comparable<Book> {
     private int id;
     private String title;
     private String publisher;
@@ -22,6 +24,12 @@ public class Book implements Comparable<Book>{
     public Book(String title, String publisher, LocalDate publishedDate, String author) {
         this(title, publisher, publishedDate);
         this.author = author;
+    }
+
+    public Book(String title, String publisher, LocalDate publishedDate, String author, String description) {
+        this(title, publisher, publishedDate);
+        this.author = author;
+        this.description = description;
     }
 
     //използваме го за двуично търсене на id
@@ -46,8 +54,14 @@ public class Book implements Comparable<Book>{
         this.id = id;
     }
 
-    public int getId() {
+    @Override
+    public Integer getId() {
         return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -81,6 +95,8 @@ public class Book implements Comparable<Book>{
     public void setAuthor(String author) {
         this.author = author;
     }
+
+
 
     //Със Стринг Билдър е по-бързо
     @Override

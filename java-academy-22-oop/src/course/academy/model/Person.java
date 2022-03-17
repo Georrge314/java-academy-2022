@@ -1,9 +1,11 @@
 package course.academy.model;
 
+import course.academy.dao.Identifiable;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class Person {
+public class Person implements Identifiable<Long> {
     private static int nextId = 1;
 
     private Long id;
@@ -32,10 +34,12 @@ public class Person {
         this.id = (long) nextId++;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

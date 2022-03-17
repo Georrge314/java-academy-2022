@@ -6,15 +6,15 @@ import java.util.StringJoiner;
 
 import static course.academy.model.Role.*;
 
-public class ReaderUser extends User {
+public class Reader extends User {
     private List<String> favoriteBlogs;
 
-    public ReaderUser(String firstName, String lastName, int age, String username, String password, List<String> favoriteBlocks) {
+    public Reader(String firstName, String lastName, int age, String username, String password, List<String> favoriteBlocks) {
         super(firstName, lastName, age, username, password, READER, true);
         this.favoriteBlogs = favoriteBlocks;
     }
 
-    public ReaderUser(String firstName, String lastName, int age, String username, String password) {
+    public Reader(String firstName, String lastName, int age, String username, String password) {
         super(firstName, lastName, age, username, password, READER, true);
         this.favoriteBlogs = new ArrayList<>();
     }
