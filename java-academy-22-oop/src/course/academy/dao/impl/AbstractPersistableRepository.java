@@ -1,15 +1,14 @@
 package course.academy.dao.impl;
 
 import course.academy.dao.Identifiable;
-import course.academy.dao.Persistable;
-import course.academy.dao.Repository;
+import course.academy.dao.PersistableRepository;
 import course.academy.exception.NonexistingEntityException;
 
 import java.util.*;
 
-public abstract class AbstractPersistableRepository<K,V extends Identifiable<K>>
-        implements Repository<K,V>, Persistable {
-    private Map<K,V> items = new HashMap<>();
+public abstract class AbstractPersistableRepository<K, V extends Identifiable<K>>
+        implements PersistableRepository<K, V> {
+    private Map<K, V> entities = new HashMap<>();
     private IdGenerator<K> idGenerator;
 
     public AbstractPersistableRepository(IdGenerator<K> idGenerator) {
@@ -18,12 +17,12 @@ public abstract class AbstractPersistableRepository<K,V extends Identifiable<K>>
 
     @Override
     public Collection<V> findAll() {
-        return items.values();
+        return entities.values();
     }
 
     @Override
     public List<V> findAllSorted(Comparator<V> comparator) { //O(N* log N) => O(1)
-        var sorted = new ArrayList<>(items.values());
+        var sorted = new ArrayList<>(entities.values());
         sorted.sort(comparator);
         return sorted;
     }
@@ -31,30 +30,30 @@ public abstract class AbstractPersistableRepository<K,V extends Identifiable<K>>
 
     @Override
     public V findById(K id) {
-        return items.get(id);
+        return entities.get(id);
     }
 
     @Override
     public V create(V item) {
         item.setId(idGenerator.getNextId());
-        items.put(item.getId(), item);
+        entities.put(item.getId(), item);
         return item;
     }
 
     @Override
     public V update(V item) throws NonexistingEntityException {
         V old = findById(item.getId());
-        if(old == null) {
+        if (old == null) {
             throw new NonexistingEntityException("Book with ID='" + item.getId() + "' does not exist.");
         }
-        items.put(item.getId(), item);
+        entities.put(item.getId(), item);
         return item;
     }
 
     @Override
     public V deleteById(K id) throws NonexistingEntityException {
-        V old = items.remove(id);
-        if(old == null) {
+        V old = entities.remove(id);
+        if (old == null) {
             throw new NonexistingEntityException("Book with ID='" + id + "' does not exist.");
         }
         return old;
@@ -62,6 +61,14 @@ public abstract class AbstractPersistableRepository<K,V extends Identifiable<K>>
 
     @Override
     public long count() {
-        return items.size();
+        return entities.size();
+    }
+
+
+    @Override
+    public void addAll(Collection<V> entities) {
+        for (V entity : entities) {
+            this.entities.put(entity.getId(), entity);
+        }
     }
 }

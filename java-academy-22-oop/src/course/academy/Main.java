@@ -4,6 +4,7 @@ package course.academy;
 import course.academy.dao.BookRepository;
 import course.academy.dao.DaoFactory;
 import course.academy.dao.impl.DaoFactoryImpl;
+import course.academy.exception.ConstraintViolationException;
 import course.academy.exception.InvalidEntityDataException;
 import course.academy.exception.NonexistingEntityException;
 import course.academy.model.Book;
@@ -15,9 +16,10 @@ import course.academy.view.Menu;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
-    public static void main(String[] args) throws NonexistingEntityException {
+    public static void main(String[] args) {
         DaoFactory daoFactory = new DaoFactoryImpl();
         BookRepository bookRepository = daoFactory.createBookRepository();
 
@@ -32,15 +34,31 @@ public class Main {
         }
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        var invalidBook = new Book("Thinking in Java", "Bruce Eckel", LocalDate.parse("10.02.2016", dtf),
+        var invalidBook = new Book("T", "Bruce Eckel", LocalDate.parse("10.02.2026", dtf),
                 "Pearson", "Detailed introduction to Java programming.");
         try {
             bookService.addBook(invalidBook);
         } catch (InvalidEntityDataException e) {
-            e.printStackTrace();
+            StringBuilder builder = new StringBuilder(e.getMessage());
+            if (e.getCause() instanceof ConstraintViolationException) {
+                builder.append(", invalid fields:");
+                var violations = ((ConstraintViolationException) e.getCause()).getFieldViolations();
+                builder.append(violations.stream()
+                        .map(v -> String.format("%s.%s [%s] - %s",
+                        v.getType().substring(v.getType().lastIndexOf(".") + 1),
+                        v.getField(),
+                        v.getInvalidValue(),
+                        v.getErrorMessage()))
+                        .collect(Collectors.joining("\n")));
+            }
+            System.out.println(builder);
         }
 
-        bookService.deleteBookById(2);
+        try {
+            bookService.deleteBookById(2);
+        } catch (NonexistingEntityException e) {
+            e.printStackTrace();
+        }
         for(Book book : bookService.getAllBooks(new Comparator<Book>(){
             @Override
             public int compare(Book book, Book other) {
@@ -52,7 +70,12 @@ public class Main {
 
         System.out.println();
 
-        Book thirdBook = bookService.getBookById(3);
+        Book thirdBook = null;
+        try {
+            thirdBook = bookService.getBookById(3);
+        } catch (NonexistingEntityException e) {
+            e.printStackTrace();
+        }
         System.out.println(thirdBook);
 
         try {
@@ -63,8 +86,16 @@ public class Main {
 
         System.out.println();
         thirdBook.setTitle("Third Book");
-        bookService.updateBook(thirdBook);
-        System.out.println(bookService.getBookById(3));
+        try {
+            bookService.updateBook(thirdBook);
+        } catch (InvalidEntityDataException | NonexistingEntityException e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println(bookService.getBookById(3));
+        } catch (NonexistingEntityException e) {
+            e.printStackTrace();
+        }
         System.out.println("Program finished normally.");
 
 

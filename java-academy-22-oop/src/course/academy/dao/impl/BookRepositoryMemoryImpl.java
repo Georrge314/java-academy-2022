@@ -24,15 +24,6 @@ class BookRepositoryMemoryImpl extends AbstractPersistableRepository<Integer, Bo
         return super.create(book);
     }
 
-    @Override
-    public void save() {
-
-    }
-
-    @Override
-    public void load() {
-
-    }
 
     @Override
     public List<Book> findAllSortedByDate(boolean ascending) { // O(1)
@@ -48,4 +39,13 @@ class BookRepositoryMemoryImpl extends AbstractPersistableRepository<Integer, Bo
         return results;
     }
 
+    @Override
+    public void save() {
+
+    }
+
+    @Override
+    public void load() {
+
+    }
 }

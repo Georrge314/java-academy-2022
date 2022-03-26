@@ -1,0 +1,24 @@
+  1: package course.demos.io;
+  2: 
+  3: import java.io.*;
+  4: 
+  5: import static java.lang.String.format;
+  6: 
+  7: public class LineNumbering {
+  8:     public static void main(String[] args) {
+  9:         int n = 0;
+ 10:         try (var in = new BufferedReader(new FileReader("./src/course/demos/io/LineNumbering.java"));
+ 11:              var out = new PrintWriter(new BufferedWriter(new FileWriter("out.txt"))))
+ 12:         {
+ 13:             String line;
+ 14:             while ((line = in.readLine()) != null) {
+ 15:                 out.printf("%3d: %s%n", ++n, line);
+ 16:             }
+ 17: 
+ 18:         } catch (FileNotFoundException e) {
+ 19:             e.printStackTrace();
+ 20:         } catch (IOException e) {
+ 21:             e.printStackTrace();
+ 22:         }
+ 23:     }
+ 24: }
